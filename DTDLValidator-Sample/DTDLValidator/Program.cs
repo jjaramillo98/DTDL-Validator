@@ -23,8 +23,8 @@
             [Option('r', "recursive", Default = true, SetName = "normal", HelpText = "Search given directory (option -d) only (false) or subdirectories too (true)")]
             public bool Recursive { get; set; }
 
-            //[Option('f', "files", HelpText = "Input files to be processed. If -d option is also specified, these files are read in addition.")]
-            //public IEnumerable<string> InputFiles { get; set; }
+            [Option('f', "files", HelpText = "Input files to be processed. If -d option is also specified, these files are read in addition.")]
+            public IEnumerable<string> InputFiles { get; set; }
 
             [Option('i', "interactive", Default = false, SetName = "interactive", HelpText = "Run in interactive mode")]
             public bool Interactive { get; set; }
@@ -54,13 +54,14 @@
                 Log.Alert("Entering interactive mode");
                 Interactive.Interactive i = new Interactive.Interactive();
                 return;
-            } 
+            }
 
             DirectoryInfo dinfo = null;
             try
             {
                 dinfo = new DirectoryInfo(opts.Directory);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Log.Error($"Error accessing the target directory '{opts.Directory}': \n{e.Message}");
                 return;
@@ -90,13 +91,14 @@
                     foreach (FileInfo fi in files)
                     {
                         StreamReader r = new StreamReader(fi.FullName);
-                        string dtdl = r.ReadToEnd(); 
+                        string dtdl = r.ReadToEnd();
                         r.Close();
                         modelDict.Add(fi, dtdl);
                         lastFile = fi.FullName;
                         count++;
                     }
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     Log.Error($"Could not read files. \nLast file read: {lastFile}\nError: \n{e.Message}");
                     return;
@@ -110,14 +112,15 @@
                     try
                     {
                         JsonDocument.Parse(dtdl);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
                         Log.Error($"Invalid json found in file {fi.FullName}.\nJson parser error \n{e.Message}");
                         errJson++;
                     }
                 }
 
-                if (errJson>0)
+                if (errJson > 0)
                 {
                     Log.Error($"\nFound  {errJson} Json parsing errors");
                     return;
@@ -156,7 +159,7 @@
                 {
                     Log.Error("Could not resolve required references");
                 }
-            } 
+            }
         }
 
         static IEnumerable<string> Resolver(IReadOnlyCollection<Dtmi> dtmis)
@@ -176,7 +179,7 @@
             foreach (Error e in errs)
             {
                 Log.Error($"{e.Tag}: {e}");
-            }            
+            }
         }
     }
 }
