@@ -151,6 +151,7 @@
                         Log.Error($"Secondary ID: {err.SecondaryID}");
                         Log.Error($"Property: {err.Property}\n");
                         derrcount++;
+                        System.Environment.Exit(0);
                     }
 
                     return;
